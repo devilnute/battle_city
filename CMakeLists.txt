@@ -4,7 +4,10 @@ project(${PROJECT_NAME})
 
 set(CMAKE_CXX_STANDARD 23)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
+add_executable(${PROJECT_NAME} 
+src/Renderer/ShaderProgram.cpp
+src/Renderer/ShaderProgram.h    
+src/main.cpp)
 
 
 add_subdirectory(external/glfw)
