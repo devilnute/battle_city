@@ -4,6 +4,8 @@
 #include <GLFW/glfw3.h>
 #include <iostream>
 
+#include "Renderer/ShaderProgram.h"
+
 size_t g_windowSizeX = 640;
 size_t g_windowSizeY = 480;
 
@@ -95,21 +97,15 @@ int main(void)
 
     glClearColor(0, 0, 0, 1);
 
-    GLuint vs = glCreateShader(GL_VERTEX_SHADER);
-    glShaderSource(vs, 1, &vertex_shader, nullptr);
-    glCompileShader(vs);
+    std::string vertexShader(vertex_shader);
+    std::string fragmentShader(fragment_shader);
+    Renderer::ShaderProgram shaderProgram(vertexShader, fragmentShader);
 
-    GLuint fs = glCreateShader(GL_FRAGMENT_SHADER);
-    glShaderSource(fs, 1, &fragment_shader, nullptr);
-    glCompileShader(fs);
-
-    GLuint shader_program = glCreateProgram();
-    glAttachShader(shader_program, vs);
-    glAttachShader(shader_program, fs);
-    glLinkProgram(shader_program);
-
-    glDeleteShader(vs);
-    glDeleteShader(fs);
+    if(!shaderProgram.isCompiled())
+    {
+        std::cerr << "Can't create shader program!\n";
+        return -1;
+    }
 
     GLuint points_vbo = 0;
     glGenBuffers(1, &points_vbo);
@@ -139,7 +135,7 @@ int main(void)
         /* Render here */
         glClear(GL_COLOR_BUFFER_BIT);
 
-        glUseProgram(shader_program);
+        shaderProgram.use();
 
         glBindVertexArray(vao);
 
@@ -147,12 +143,11 @@ int main(void)
 
         /* Swap front and back buffers */
         glfwSwapBuffers(pWindow);
-
         /* Poll for and process events */
         glfwPollEvents();
     }
 
     glfwTerminate();
-    std::cout << "Hi!\n";
+    
     return 0;
 }

@@ -7,14 +7,14 @@ namespace Renderer
     ShaderProgram::ShaderProgram(const std::string &vertexShader, const std::string &fragmentShader)
     {
         GLuint vetrexShaderID;
-        if (!createShader(vertexShader,GL_VERTEX_SHADER, vetrexShaderID))
+        if (!createShader(vertexShader, GL_VERTEX_SHADER, vetrexShaderID))
         {
             std::cerr << "VERTEX SHADER compile-time-error" << std::endl;
             return;
         }
 
         GLuint fragmentShaderID;
-        if (!createShader(fragmentShader,GL_FRAGMENT_SHADER, fragmentShaderID))
+        if (!createShader(fragmentShader, GL_FRAGMENT_SHADER, fragmentShaderID))
         {
             std::cerr << "FRAGMENT SHADER compile-time-error" << std::endl;
             glDeleteShader(vetrexShaderID);
@@ -28,7 +28,7 @@ namespace Renderer
 
         GLint success;
         glGetProgramiv(m_ID, GL_LINK_STATUS, &success);
-        if(!success)
+        if (!success)
         {
             GLchar infoLog[1024];
             glad_glGetShaderInfoLog(m_ID, 1024, nullptr, infoLog);
@@ -49,7 +49,7 @@ namespace Renderer
         glDeleteProgram(m_ID);
     }
 
-    bool ShaderProgram::use() const
+    void ShaderProgram::use() const
     {
         glUseProgram(m_ID);
     }
@@ -71,5 +71,24 @@ namespace Renderer
             return false;
         }
         return true;
+    }
+
+    ShaderProgram &ShaderProgram::operator=(ShaderProgram &&shaderProgram) noexcept
+    {
+        glDeleteProgram(m_ID);
+        m_ID = shaderProgram.m_ID;
+        m_isCompiled = shaderProgram.m_isCompiled;
+
+        shaderProgram.m_ID = 0;
+        shaderProgram.m_isCompiled = 0;
+    }
+
+    ShaderProgram::ShaderProgram(ShaderProgram &&shaderProgram) noexcept
+    {
+        m_ID = shaderProgram.m_ID;
+        m_isCompiled = shaderProgram.m_isCompiled;
+
+        shaderProgram.m_ID = 0;
+        shaderProgram.m_isCompiled = 0;
     }
 }

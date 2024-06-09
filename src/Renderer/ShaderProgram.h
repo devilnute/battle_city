@@ -13,11 +13,11 @@ namespace Renderer
         ShaderProgram() = delete;
         ShaderProgram(ShaderProgram &) = delete;
         ShaderProgram &operator=(const ShaderProgram &) = delete;
-        ShaderProgram &operator=(ShaderProgram &&shaderProgram);
-        ShaderProgram(ShaderProgram &&shaderProgram);
+        ShaderProgram &operator=(ShaderProgram &&shaderProgram) noexcept;
+        ShaderProgram(ShaderProgram &&shaderProgram) noexcept;
         bool isCompiled() const { return m_isCompiled; }
 
-        bool use() const;
+        void use() const;
 
     private:
         bool m_isCompiled = false;
