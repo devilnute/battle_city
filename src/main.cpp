@@ -153,5 +153,6 @@ int main(void)
     }
 
     glfwTerminate();
+    std::cout << "Hi!\n";
     return 0;
 }
