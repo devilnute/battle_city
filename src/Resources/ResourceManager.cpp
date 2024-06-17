@@ -1,6 +1,10 @@
 #include "ResourceManager.h"
 #include "../Renderer/ShaderProgram.h"
 
+#define STB_IMAGE_IMPLEMENTATION
+#define STBI_ONLY_PNG
+#include "stb_image.h"
+
 #include <sstream>
 #include <fstream>
 #include <iostream>
@@ -64,4 +68,25 @@ std::shared_ptr<Renderer::ShaderProgram> ResourceManager::getShader(const std::s
 
     std::cerr << "Can't find shader program!" << std::endl;
     return nullptr;
+}
+
+void ResourceManager::loadTexture(const std::string &textureName, const std::string &texturePath)
+{
+    int channels = 0;
+    int width = 0;
+    int height = 0;
+
+    stbi_set_flip_vertically_on_load(true); // by default stb_image reads
+                                            // from the top left pixel
+                                            // (otherwise openGL reads from the bottom left)
+
+    unsigned char* pixels = stbi_load(std::string(m_Path + "/" + texturePath).c_str(), &width, &height, &channels, 0);
+
+    if(!pixels)
+    {
+        std::cerr << "Can't load image! " << texturePath << std::endl;
+        return;
+    }
+
+    stbi_image_free(pixels);
 }

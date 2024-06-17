@@ -81,6 +81,7 @@ namespace Renderer
 
         shaderProgram.m_ID = 0;
         shaderProgram.m_isCompiled = 0;
+        return *this;
     }
 
     ShaderProgram::ShaderProgram(ShaderProgram &&shaderProgram) noexcept
