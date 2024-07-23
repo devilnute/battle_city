@@ -3,8 +3,8 @@
 Для сборки необходимы только Git, CMake и компилятор
 
 ```powershell
-git clone https://github.com/simple-coding-channel/BattleCity.git
-cd BattleCity
+git clone https://github.com/simple-coding-channel/battle_city.git
+cd battle_city
 mkdir build
 cmake ..
 cmake --build .
